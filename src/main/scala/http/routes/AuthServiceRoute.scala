@@ -1,11 +1,11 @@
-package me.archdev.restapi.http.routes
+package http.routes
 
 import akka.http.scaladsl.model.StatusCodes
 import akka.http.scaladsl.server.Directives._
 import de.heikoseeberger.akkahttpcirce.CirceSupport
-import me.archdev.restapi.http.SecurityDirectives
-import me.archdev.restapi.models.UserEntity
-import me.archdev.restapi.services.AuthService
+import http.SecurityDirectives
+import models.UserEntity
+import services.AuthService
 import io.circe.generic.auto._
 import io.circe.syntax._
 

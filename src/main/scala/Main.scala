@@ -1,15 +1,16 @@
-package me.archdev.restapi
-
 import akka.actor.ActorSystem
 import akka.event.{Logging, LoggingAdapter}
 import akka.http.scaladsl.Http
 import akka.stream.ActorMaterializer
-import me.archdev.restapi.http.HttpService
-import me.archdev.restapi.services.{AuthService, UsersService}
-import me.archdev.restapi.utils.{Config, DatabaseService, FlywayService}
+import http.HttpService
+import services.{AuthService, UsersService}
+import utils.{Config, DatabaseService, FlywayService}
 
 import scala.concurrent.ExecutionContext
 
+/**
+  * author Yuki Hirai on 2017/06/27.
+  */
 object Main extends App with Config {
   implicit val actorSystem = ActorSystem()
   implicit val executor: ExecutionContext = actorSystem.dispatcher
@@ -17,7 +18,7 @@ object Main extends App with Config {
   implicit val materializer: ActorMaterializer = ActorMaterializer()
 
   val flywayService = new FlywayService(jdbcUrl, dbUser, dbPassword)
-  flywayService.migrateDatabaseSchema
+  flywayService.migrateDatabaseSchema()
 
   val databaseService = new DatabaseService(jdbcUrl, dbUser, dbPassword)
 

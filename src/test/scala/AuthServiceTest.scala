@@ -1,10 +1,8 @@
-package me.archdev
-
 import akka.http.scaladsl.model.{HttpEntity, MediaTypes, StatusCodes}
 import akka.http.scaladsl.server
 import io.circe.generic.auto._
 import io.circe.syntax._
-import me.archdev.restapi.models.{TokenEntity, UserEntity}
+import models.{TokenEntity, UserEntity}
 
 class AuthServiceTest extends BaseServiceTest {
 

@@ -1,4 +1,4 @@
-package me.archdev.restapi.utils
+package utils
 
 import org.flywaydb.core.Flyway
 

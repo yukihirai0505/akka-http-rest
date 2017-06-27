@@ -1,9 +1,9 @@
-package me.archdev.restapi.http
+package http
 
 import akka.http.scaladsl.server.Directives._
-import me.archdev.restapi.http.routes.{AuthServiceRoute, UsersServiceRoute}
-import me.archdev.restapi.services.{AuthService, UsersService}
-import me.archdev.restapi.utils.CorsSupport
+import http.routes.{AuthServiceRoute, UsersServiceRoute}
+import services.{AuthService, UsersService}
+import utils.CorsSupport
 
 import scala.concurrent.ExecutionContext
 

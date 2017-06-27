@@ -1,9 +1,7 @@
-package me.archdev
-
 import akka.http.scaladsl.model.StatusCodes._
 import akka.http.scaladsl.model.{HttpEntity, MediaTypes}
 import io.circe.generic.auto._
-import me.archdev.restapi.models.UserEntity
+import models.UserEntity
 import org.scalatest.concurrent.ScalaFutures
 
 import scala.util.Random
@@ -35,7 +33,7 @@ class UsersServiceTest extends BaseServiceTest with ScalaFutures {
 
     "update user by id and retrieve it" in new Context {
       val testUser = testUsers(3)
-      val newUsername = Random.nextString(10)
+      val newUsername = s"アップデートテスト${Random.nextInt()}"
       val requestEntity = HttpEntity(MediaTypes.`application/json`, s"""{"username": "$newUsername"}""")
 
       Post(s"/users/${testUser.id.get}", requestEntity) ~> route ~> check {
@@ -58,7 +56,7 @@ class UsersServiceTest extends BaseServiceTest with ScalaFutures {
 
     "retrieve currently logged user" in new Context {
       val testUser = testUsers(1)
-      val header = "Token" -> testTokens.find(_.userId.contains(testUser.id.get)).get.token
+      val header = "Token" -> testTokens.find(_.userId == testUser.id.get).get.token
 
       Get("/users/me") ~> addHeader(header._1, header._2) ~> route ~> check {
         responseAs[UserEntity] should be(testUsers.find(_.id.contains(testUser.id.get)).get)
@@ -69,7 +67,7 @@ class UsersServiceTest extends BaseServiceTest with ScalaFutures {
       val testUser = testUsers.head
       val newUsername = Random.nextString(10)
       val requestEntity = HttpEntity(MediaTypes.`application/json`, s"""{"username": "$newUsername"}""")
-      val header = "Token" -> testTokens.find(_.userId.contains(testUser.id.get)).get.token
+      val header = "Token" -> testTokens.find(_.userId == testUser.id.get).get.token
 
       Post("/users/me", requestEntity) ~> addHeader(header._1, header._2) ~> route ~> check {
         responseAs[UserEntity] should be(testUsers.find(_.id.contains(testUser.id.get)).get.copy(username = newUsername))

@@ -1,8 +1,8 @@
-package me.archdev.restapi.services
+package services
 
-import me.archdev.restapi.models.db.TokenEntityTable
-import me.archdev.restapi.models.{TokenEntity, UserEntity}
-import me.archdev.restapi.utils.DatabaseService
+import models.db.TokenEntityTable
+import models.{TokenEntity, UserEntity}
+import utils.DatabaseService
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -16,7 +16,7 @@ class AuthService(val databaseService: DatabaseService)(usersService: UsersServi
       users.find(user => user.password == password) match {
         case Some(user) => db.run(tokens.filter(_.userId === user.id).result.headOption).flatMap {
           case Some(token) => Future.successful(Some(token))
-          case None        => createToken(user).map(token => Some(token))
+          case None => createToken(user).map(token => Some(token))
         }
         case None => Future.successful(None)
       }
@@ -33,6 +33,8 @@ class AuthService(val databaseService: DatabaseService)(usersService: UsersServi
       user <- users.filter(_.id === token.userId)
     } yield user).result.headOption)
 
-  def createToken(user: UserEntity): Future[TokenEntity] = db.run(tokens returning tokens += TokenEntity(userId = user.id))
+  def createToken(user: UserEntity): Future[TokenEntity] = db.run {
+    tokens returning tokens.map(_.id) into ((token, id) => token.copy(id = Some(id))) += TokenEntity(userId = user.id.get)
+  }
 
 }

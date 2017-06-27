@@ -1,4 +1,4 @@
-package me.archdev.restapi.utils
+package utils
 
 import com.zaxxer.hikari.{HikariConfig, HikariDataSource}
 
@@ -10,7 +10,7 @@ class DatabaseService(jdbcUrl: String, dbUser: String, dbPassword: String) {
 
   private val dataSource = new HikariDataSource(hikariConfig)
 
-  val driver = slick.driver.PostgresDriver
+  val driver = slick.jdbc.MySQLProfile
   import driver.api._
   val db = Database.forDataSource(dataSource)
   db.createSession()
